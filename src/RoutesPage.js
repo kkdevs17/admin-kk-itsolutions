@@ -36,24 +36,36 @@ export default function RoutesPage() {
   const isAuth = useSelector(isAuthStatus);
   const socket = io.connect("https://kk-time-table-server.herokuapp.com");
   // set notifications
+
   useEffect(() => {
     socket.on("get_checkin_notification", (data) => {
-      setCheckInNotifications(data.data);
-      setGetCheckInCheckOutData(data.data);
-      setCheckOut(false);
-      setCheckIn(true);
+      console.log(data.data.checkOut);
+      if (data.data.checkOut == false) {
+        setCheckOutNotifications("");
+        setCheckInNotifications(data.data);
+        setGetCheckInCheckOutData(data.data);
+        setCheckOut(false);
+        setCheckIn(true);
+      }
     });
   }, []);
   useEffect(() => {
     socket.on("get_checkout_notification", (data) => {
-      setCheckOutNotifications(data.data);
-      setGetCheckInCheckOutData(data.data);
-      setCheckIn(false);
-      setCheckOut(true);
+      console.log(data.data.checkOut);
+      if (data.data.checkOut == true) {
+        setCheckInNotifications("");
+        setCheckOutNotifications(data.data);
+        setGetCheckInCheckOutData(data.data);
+        setCheckIn(false);
+        setCheckOut(true);
+      }
     });
   }, []);
   useEffect(() => {
-    if (checkIn || checkOut) {
+    if (
+      (checkIn || checkOut) &&
+      (checkInNotifications || checkOutNotifications)
+    ) {
       let url;
       if (checkIn) {
         url = `${SERVER_BASE_URL}/api/employee/${checkInNotifications.employeeId}`;
@@ -61,10 +73,13 @@ export default function RoutesPage() {
         url = `${SERVER_BASE_URL}/api/employee/${checkOutNotifications.employeeId}`;
       }
       fetchDataWithoutBody(url).then((response) => {
-        if (response.success == true) {
-          const audio = new Audio(
-            "https://drive.google.com/uc?export=download&id=1M95VOpto1cQ4FQHzNBaLf0WFQglrtWi7"
-          );
+        if (response.success == true && (checkIn || checkOut)) {
+          let audio;
+          if (checkIn || checkOut) {
+            audio = new Audio(
+              "https://drive.google.com/uc?export=download&id=1M95VOpto1cQ4FQHzNBaLf0WFQglrtWi7"
+            );
+          }
           audio.addEventListener("canplaythrough", (event) => {
             audio.play();
           });
@@ -85,6 +100,12 @@ export default function RoutesPage() {
       });
     }
   }, [getCheckInCheckOutData]);
+  console.log(
+    "checkInNotifications",
+    checkInNotifications,
+    "checkOutNotifications",
+    checkOutNotifications
+  );
   useEffect(() => {
     setLoading(true);
     try {

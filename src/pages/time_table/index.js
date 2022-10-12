@@ -14,14 +14,14 @@ const TimeTable = ({
   checkInNotifications,
   checkOutNotifications,
 }) => {
+  console.log("checkOutNotifications", checkOutNotifications);
   const dispatch = useDispatch();
   const [employeesData, setEmployeesData] = useState([]);
   const [name, setName] = useState("");
   const [date, setDate] = useState("");
-  const { employeesTimeTable, allEmployeesTimeTable, loading, success } =
-    useSelector((state) => state.employeeTimeTable);
-  console.log("employeesTimeTable", employeesTimeTable);
-  console.log("name", name);
+  const { employeesTimeTable, loading, success } = useSelector(
+    (state) => state.employeeTimeTable
+  );
   useEffect(() => {
     dispatch(GET_ALL_EMPLOYEES_TIME_TABLE({ name, date }));
     if (success === true) {
@@ -29,10 +29,10 @@ const TimeTable = ({
     }
   }, [
     employeesTimeTable.length,
-    date,
-    name,
     checkInNotifications,
     checkOutNotifications,
+    date,
+    name,
   ]);
   useEffect(() => {
     dispatch(GET_ALL_EMPLOYEES_TIME_TABLE({ name, date }));

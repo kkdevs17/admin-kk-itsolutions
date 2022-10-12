@@ -1,5 +1,6 @@
 import TimeTable from "../index";
 const Developers = ({ checkInNotifications, checkOutNotifications }) => {
+  console.log("checkOutNotificationsInDevelopers", checkOutNotifications);
   return (
     <>
       <h4>Developers</h4>
