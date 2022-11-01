@@ -7,6 +7,17 @@ const SearchBar = ({ handleNameInput, name, handleDaysChange, date }) => {
     { key: "153", value: "153", showingValue: "6 months" },
     { key: "365", value: "375", showingValue: "1 year" },
   ];
+  const weekday = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+  const d = new Date();
+  let day = weekday[d.getDay()];
   return (
     <div className="row mt-4">
       <div className="col-md-2 mt-3">Search by</div>
@@ -32,6 +43,9 @@ const SearchBar = ({ handleNameInput, name, handleDaysChange, date }) => {
           value={name}
           onChange={handleNameInput}
         />
+      </div>
+      <div className="col-md-4 mt-3 d-flex justify-content-end font-extrabold">
+        {day}
       </div>
     </div>
   );

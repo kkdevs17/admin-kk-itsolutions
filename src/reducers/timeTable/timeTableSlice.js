@@ -16,7 +16,7 @@ export const GET_ALL_EMPLOYEES_TIME_TABLE = createAsyncThunk(
     try {
       const url = `${SERVER_BASE_URL}/api/timeTable?name=${
         data?.name ? data?.name : ""
-      }&date=${data?.date ? Number(data?.date) : 17}`;
+      }&date=${data?.date ? Number(data?.date) : 1}`;
       return fetchDataWithoutBody(url);
     } catch (error) {
       return error;

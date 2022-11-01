@@ -1,27 +1,32 @@
 import Datatable from "../../components/datatable";
 import { useDispatch, useSelector } from "react-redux";
-import { Toast } from "../../helpers/sweetAlert";
-import { SERVER_BASE_URL } from "../../common/constants";
-import { deleteDataFromBody } from "../../services/service";
 import SearchBar from "../../components/searchBar";
 import { useEffect, useState } from "react";
 import { GET_ALL_EMPLOYEES_TIME_TABLE } from "../../reducers/timeTable/timeTableSlice";
 import { CircularProgress } from "@material-ui/core";
-import moment from "moment";
+import { mainColumns, serchedColumns } from "./timeTableColumns";
+import { deleteMultipleData, manageStates } from "../../common/adminFunctions";
+// import ExpandComponent from "./ExpandComponent";
+
 const TimeTable = ({
   developer,
   internee,
   checkInNotifications,
   checkOutNotifications,
 }) => {
-  console.log("checkOutNotifications", checkOutNotifications);
   const dispatch = useDispatch();
   const [employeesData, setEmployeesData] = useState([]);
   const [name, setName] = useState("");
   const [date, setDate] = useState("");
+  const [rowId, setRowId] = useState("");
+  const [columns, setColumns] = useState([]);
+  const [key, setKey] = useState(false);
+
   const { employeesTimeTable, loading, success } = useSelector(
     (state) => state.employeeTimeTable
   );
+  console.log(employeesTimeTable);
+
   useEffect(() => {
     dispatch(GET_ALL_EMPLOYEES_TIME_TABLE({ name, date }));
     if (success === true) {
@@ -34,14 +39,15 @@ const TimeTable = ({
     date,
     name,
   ]);
-  useEffect(() => {
-    dispatch(GET_ALL_EMPLOYEES_TIME_TABLE({ name, date }));
-    if (success === true) {
-      manageState();
-    }
-  }, [name, date]);
   const manageState = () => {
-    // console.log(name);
+    // manageStates(
+    //   internee,
+    //   developer,
+    //   name,
+    //   date,
+    //   employeesTimeTable,
+    // );
+
     let internees, developers, employees_data;
     if (internee) {
       if ((name && date) || name) {
@@ -52,13 +58,13 @@ const TimeTable = ({
         internees = employeesTimeTable.filter(
           (item) => item?.employeeId?.designation == "internee"
         );
-        employees_data = internees.map((data, i) => {
-          return {
-            ...data,
-            sr_no: i + 1,
-          };
-        });
       }
+      employees_data = internees.map((data, i) => {
+        return {
+          ...data,
+          sr_no: i + 1,
+        };
+      });
     } else if (developer) {
       if ((name && date) || name) {
         developers = employeesTimeTable.filter(
@@ -76,8 +82,30 @@ const TimeTable = ({
         };
       });
     }
-
     setEmployeesData(employees_data);
+  };
+
+  const deleteMultiple = (data) => {
+    deleteMultipleData(data, key);
+    dispatch(GET_ALL_EMPLOYEES_TIME_TABLE({ name, date }));
+  };
+  useEffect(() => {
+    if ((name && date) || name) {
+      setColumns(serchedColumns);
+    } else if (date || (!date && !name)) {
+      setColumns(mainColumns);
+    }
+  }, [
+    serchedColumns,
+    mainColumns,
+    name,
+    date,
+    checkInNotifications,
+    checkOutNotifications,
+  ]);
+  const viewManageData = (row) => {
+    console.log(row);
+    setRowId(row.id);
   };
   const handleNameInput = (e) => {
     setName(e.target.value);
@@ -85,103 +113,10 @@ const TimeTable = ({
   const handleDaysChange = (e) => {
     setDate(e.target.value);
   };
-  const deleteAll = (data) => {
-    const timeTable_ids = data.map((dataItem) => {
-      return dataItem._id;
-    });
-    const body = {
-      timeTable_ids: timeTable_ids,
-    };
-    const url = `${SERVER_BASE_URL}/api/timeTable`;
-    return deleteDataFromBody(url, body).then((response) => {
-      if (response.success === true) {
-        Toast.fire({
-          icon: "success",
-          title: response.message,
-        });
-        dispatch(GET_ALL_EMPLOYEES_TIME_TABLE({ name, date }));
-        return true;
-      } else {
-        Toast.fire({
-          icon: "error",
-          title: response.message,
-        });
-        return false;
-      }
-    });
+  const ExpandComponent = () => {
+    return <div>hlo</div>;
   };
-  let columns;
-  if ((name && date) || name) {
-    columns = [
-      {
-        name: <b>Sr No</b>,
-        selector: (row) => row.sr_no,
-        sortable: true,
-        reorder: true,
-      },
-      {
-        name: <b>Name</b>,
-        selector: (row) => row.name,
-        sortable: true,
-        reorder: true,
-      },
-      {
-        name: <b>Date</b>,
-        selector: (row) => moment(row.employeeId.createdAt).format("L"),
-        sortable: true,
-        reorder: true,
-      },
-      {
-        name: <b>CheckIn Time</b>,
-        selector: (row) => row.employeeId.checkInTime,
-        sortable: true,
-        reorder: true,
-      },
-      {
-        name: <b>CheckOut Time</b>,
-        selector: (row) =>
-          row.employeeId.checkOutTime
-            ? row.employeeId.checkOutTime
-            : "At office",
-        sortable: true,
-        reorder: true,
-      },
-    ];
-  } else if (date || (!date && !name)) {
-    columns = [
-      {
-        name: <b>Sr No</b>,
-        selector: (row) => row.sr_no,
-        sortable: true,
-        reorder: true,
-      },
-      {
-        name: <b>Name</b>,
-        selector: (row) => row.employeeId.name,
-        sortable: true,
-        reorder: true,
-      },
-      {
-        name: <b>Date</b>,
-        selector: (row) => moment(row.employeeId.createdAt).format("L"),
-        sortable: true,
-        reorder: true,
-      },
-      {
-        name: <b>CheckIn Time</b>,
-        selector: (row) => row.checkInTime,
-        sortable: true,
-        reorder: true,
-      },
-      {
-        name: <b>CheckOut Time</b>,
-        selector: (row) => (row.checkOutTime ? row.checkOutTime : "At office"),
-        sortable: true,
-        reorder: true,
-      },
-    ];
-  }
-
+  console.log(employeesData);
   return (
     <>
       <SearchBar
@@ -195,7 +130,14 @@ const TimeTable = ({
           columns={columns}
           rows={employeesData}
           selectable={true}
-          delFunction={deleteAll}
+          delFunction={deleteMultiple}
+          expandableRows
+          onRowExpandToggled={(bol, row) => {
+            console.log("row", row);
+            viewManageData(row);
+          }}
+          expandableRowExpanded={(row) => row.id == rowId && row.reason}
+          expandableRowsComponent={ExpandComponent}
         />
       ) : (
         <div className="d-flex justify-content-center mt-5">

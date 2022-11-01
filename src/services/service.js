@@ -1,28 +1,5 @@
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import ROUTES from "../common/routes";
 import { Toast } from "../helpers/sweetAlert";
-
-// export const fetchDataWithBodyAndToast = async (url, body) => {
-//   try {
-//     const response = await axios.post(url, body);
-//     console.log(response.data);
-//     if (response.data.success === true) {
-//       Toast.fire({
-//         icon: "success",
-//         title: response.data.message,
-//       });
-//     } else {
-//       Toast.fire({
-//         icon: "error",
-//         title: response.data.message,
-//       });
-//     }
-//     return response;
-//   } catch (error) {
-//     return error;
-//   }
-// };
 export const fetchDataWithBodyAndToast = async (url, body) => {
   try {
     const response = await fetch(url, {

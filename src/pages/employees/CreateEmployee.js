@@ -14,7 +14,11 @@ const AddCategory = () => {
   const { successMessage, employee, employees, loading } = useSelector(
     (state) => state.employee
   );
-  console.log(employees);
+  const DesignationOptions = [
+    { key: "admin", value: "admin" },
+    { key: "developer", value: "developer" },
+    { key: "internee", value: "internee" },
+  ];
   // useEffect(() => {
   //   if (employees && employee && successMessage) employees.insert(0, employee);
   // }, [employee.length]);
@@ -91,8 +95,11 @@ const AddCategory = () => {
             onChange={designationHandleChange}
           >
             <option value="">Choose designation...</option>
-            <option value="developer">developer</option>
-            <option value="internee">internee</option>
+            {DesignationOptions.map((item) => (
+              <option value={item.value} key={item.key}>
+                {item.value}
+              </option>
+            ))}
           </select>
           {(errors.designation || designation == "") &&
           designationValidation ? (

@@ -13,7 +13,6 @@ const initialState = {
   success: "",
   successMessage: "",
   message: "",
-  deleted_employees: {},
   updatedEmployee: {},
 };
 
@@ -47,7 +46,7 @@ export const UPDATE_EMPLOYEES_DATA = createAsyncThunk(
   async ({ url, body }, { dispatch }) => {
     try {
       const response = await axios.put(url, body);
-      if (response.data.data.success === "true") dispatch(GET_ALL_EMPLOYEES());
+      if (response.data.success === true) dispatch(GET_ALL_EMPLOYEES());
 
       return response.data;
     } catch (error) {

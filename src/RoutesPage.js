@@ -35,11 +35,11 @@ export default function RoutesPage() {
   const [checkOut, setCheckOut] = useState(false);
   const isAuth = useSelector(isAuthStatus);
   const socket = io.connect("https://kk-time-table-server.herokuapp.com");
-  // set notifications
 
+  // set notifications
   useEffect(() => {
     socket.on("get_checkin_notification", (data) => {
-      console.log(data.data.checkOut);
+      console.log("get checkin notif", data.data.checkOut);
       if (data.data.checkOut == false) {
         setCheckOutNotifications("");
         setCheckInNotifications(data.data);
@@ -51,7 +51,7 @@ export default function RoutesPage() {
   }, []);
   useEffect(() => {
     socket.on("get_checkout_notification", (data) => {
-      console.log(data.data.checkOut);
+      console.log("get checkout notif", data.data.checkOut);
       if (data.data.checkOut == true) {
         setCheckInNotifications("");
         setCheckOutNotifications(data.data);
@@ -75,11 +75,9 @@ export default function RoutesPage() {
       fetchDataWithoutBody(url).then((response) => {
         if (response.success == true && (checkIn || checkOut)) {
           let audio;
-          if (checkIn || checkOut) {
-            audio = new Audio(
-              "https://drive.google.com/uc?export=download&id=1M95VOpto1cQ4FQHzNBaLf0WFQglrtWi7"
-            );
-          }
+          audio = new Audio(
+            "https://drive.google.com/uc?export=download&id=1M95VOpto1cQ4FQHzNBaLf0WFQglrtWi7"
+          );
           audio.addEventListener("canplaythrough", (event) => {
             audio.play();
           });
@@ -100,12 +98,7 @@ export default function RoutesPage() {
       });
     }
   }, [getCheckInCheckOutData]);
-  console.log(
-    "checkInNotifications",
-    checkInNotifications,
-    "checkOutNotifications",
-    checkOutNotifications
-  );
+
   useEffect(() => {
     setLoading(true);
     try {

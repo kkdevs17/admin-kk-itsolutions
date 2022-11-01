@@ -5,7 +5,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import ROUTES from "../../common/routes";
 import BackButton from "../../components/back_button/BackButton";
 import { useDispatch, useSelector } from "react-redux";
-import { UPDATE_EMPLOYEES_DATA } from "../../reducers/employee/employeeSlice";
+import {
+  GET_ALL_EMPLOYEES,
+  UPDATE_EMPLOYEES_DATA,
+} from "../../reducers/employee/employeeSlice";
 import { fetchDataWithoutBody } from "../../services/service";
 
 const EditCategory = () => {
@@ -14,7 +17,11 @@ const EditCategory = () => {
   const [designation, setDesignation] = useState("");
   const [designationValidation, setDesignationValidation] = useState(false);
   const [response, setResponse] = useState("");
-
+  const DesignationOptions = [
+    { key: "admin", value: "admin" },
+    { key: "developer", value: "developer" },
+    { key: "internee", value: "internee" },
+  ];
   const { id } = useParams();
   const { success, loading } = useSelector((state) => state.employee);
   const {
@@ -50,6 +57,8 @@ const EditCategory = () => {
       if (success == true) {
         navigate(ROUTES.EMPLOYEES.BASE);
         setDesignationValidation(false);
+        dispatch(GET_ALL_EMPLOYEES());
+        return true;
       }
     }
   };
@@ -85,8 +94,11 @@ const EditCategory = () => {
             onChange={designationHandleChange}
           >
             <option value="">Choose designation...</option>
-            <option value="developer">developer</option>
-            <option value="internee">internee</option>
+            {DesignationOptions.map((item) => (
+              <option value={item.value} key={item.key}>
+                {item.value}
+              </option>
+            ))}
           </select>
           {(errors.designation || designation == "") &&
           designationValidation ? (
