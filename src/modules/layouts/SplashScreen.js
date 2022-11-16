@@ -1,3 +1,6 @@
+import kk_logo from "../../assets/images/logo/kk-logo.png";
+// import RenderSmoothImage from "render-smooth-image-react";
+// import "render-smooth-image-react/build/style.css";
 const SplashScreen = () => {
   return (
     <div
@@ -12,7 +15,7 @@ const SplashScreen = () => {
         zIndex: "9999",
       }}
     >
-      <svg
+      {/* <svg
         style={{
           position: "absolute",
           left: "50%",
@@ -45,7 +48,20 @@ const SplashScreen = () => {
             repeatCount="indefinite"
           />
         </path>
-      </svg>
+      </svg> */}
+      <img
+        src={kk_logo}
+        alt="Logo"
+        width="30%"
+        height="30%"
+        style={{
+          position: "absolute",
+          left: "50%",
+          top: "50%",
+          transform: "translate(-50%, -50%)",
+        }}
+      />
+      {/* <RenderSmoothImage src={kk_logo} alt="logo" width="30%" height="30%" /> */}
     </div>
   );
 };

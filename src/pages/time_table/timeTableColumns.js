@@ -1,3 +1,5 @@
+import moment from "moment";
+
 export const serchedColumns = [
   {
     name: <b>Sr No</b>,
@@ -14,7 +16,7 @@ export const serchedColumns = [
   },
   {
     name: <b>Date</b>,
-    selector: (row) => row.employeeId.createdAt.substring(0, 10),
+    selector: (row) => moment(row.employeeId.createdAt).format("L"),
     sortable: true,
     reorder: true,
   },
@@ -58,7 +60,7 @@ export const mainColumns = [
   },
   {
     name: <b>Date</b>,
-    selector: (row) => row.createdAt.substring(0, 10),
+    selector: (row) => moment(row.createdAt).format("L"),
     sortable: true,
     reorder: true,
   },
@@ -82,12 +84,5 @@ export const mainColumns = [
     sortable: true,
     reorder: true,
     width: "145px",
-  },
-  {
-    name: <b>Reason</b>,
-    selector: (row) => (row.reason ? row.reason : "..."),
-    sortable: true,
-    reorder: true,
-    width: "245px",
   },
 ];

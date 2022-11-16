@@ -18,24 +18,23 @@ const TimeTable = ({
   const [employeesData, setEmployeesData] = useState([]);
   const [name, setName] = useState("");
   const [date, setDate] = useState("");
-  const [rowId, setRowId] = useState("");
   const [columns, setColumns] = useState([]);
   const [key, setKey] = useState(false);
+  const [expanded, setExpanded] = useState(false);
 
   const { employeesTimeTable, loading, success } = useSelector(
     (state) => state.employeeTimeTable
   );
   console.log(employeesTimeTable);
-
   useEffect(() => {
     dispatch(GET_ALL_EMPLOYEES_TIME_TABLE({ name, date }));
     if (success === true) {
       manageState();
     }
   }, [
+    checkOutNotifications,
     employeesTimeTable.length,
     checkInNotifications,
-    checkOutNotifications,
     date,
     name,
   ]);
@@ -68,11 +67,11 @@ const TimeTable = ({
     } else if (developer) {
       if ((name && date) || name) {
         developers = employeesTimeTable.filter(
-          (item) => item?.designation == "developer"
+          (item) => item?.designation != "internee"
         );
       } else if (date || (!date && !name)) {
         developers = employeesTimeTable.filter(
-          (item) => item?.employeeId?.designation == "developer"
+          (item) => item?.employeeId?.designation != "internee"
         );
       }
       employees_data = developers.map((data, i) => {
@@ -103,20 +102,12 @@ const TimeTable = ({
     checkInNotifications,
     checkOutNotifications,
   ]);
-  const viewManageData = (row) => {
-    console.log(row);
-    setRowId(row.id);
-  };
   const handleNameInput = (e) => {
     setName(e.target.value);
   };
   const handleDaysChange = (e) => {
     setDate(e.target.value);
   };
-  const ExpandComponent = () => {
-    return <div>hlo</div>;
-  };
-  console.log(employeesData);
   return (
     <>
       <SearchBar
@@ -129,15 +120,8 @@ const TimeTable = ({
         <Datatable
           columns={columns}
           rows={employeesData}
-          selectable={true}
           delFunction={deleteMultiple}
-          expandableRows
-          onRowExpandToggled={(bol, row) => {
-            console.log("row", row);
-            viewManageData(row);
-          }}
-          expandableRowExpanded={(row) => row.id == rowId && row.reason}
-          expandableRowsComponent={ExpandComponent}
+          expanded={true}
         />
       ) : (
         <div className="d-flex justify-content-center mt-5">

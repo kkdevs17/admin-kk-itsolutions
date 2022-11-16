@@ -8,6 +8,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { ConfirmSweetAlert } from "../../helpers/sweetAlert";
+import ExpandComponent from "../../pages/time_table/ExpandComponent";
 
 const DataTablePage = ({
   title,
@@ -15,7 +16,7 @@ const DataTablePage = ({
   rows,
   addBtnUrl,
   delFunction,
-  selectable,
+  expanded,
 }) => {
   const [selectedData, setSelectedData] = useState([]);
   const [toggleCleared, setToggleCleared] = useState(false);
@@ -57,7 +58,7 @@ const DataTablePage = ({
     }
   };
 
-  return selectable ? (
+  return !expanded ? (
     <DataTable
       title={<h3>{title}</h3>}
       columns={columns}
@@ -82,6 +83,14 @@ const DataTablePage = ({
       sortIcon={<SortIcon className="ms-1" />}
       pagination
       highlightOnHover
+      selectableRows
+      actions={actions}
+      contextActions={contextActions(deleteAll)}
+      selectableRowsComponent={Checkbox}
+      clearSelectedRows={toggleCleared}
+      onSelectedRowsChange={handleChange}
+      expandableRows={expanded}
+      expandableRowsComponent={ExpandComponent}
     />
   );
 };
