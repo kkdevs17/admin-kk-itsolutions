@@ -16,7 +16,6 @@ const EditCategory = () => {
   const dispatch = useDispatch();
   const [designation, setDesignation] = useState("");
   const [designationValidation, setDesignationValidation] = useState(false);
-  const [response, setResponse] = useState("");
   const DesignationOptions = [
     { key: "admin", value: "admin" },
     { key: "developer", value: "developer" },
@@ -36,7 +35,6 @@ const EditCategory = () => {
     fetchDataWithoutBody(url).then((response) => {
       if (response.success === true) {
         let defaultValues = {};
-        setResponse(response.data.employee.designation);
         defaultValues.employee_name = response.data.employee.name;
         // defaultValues.designation = response.data.employee.designation;
         reset({ ...defaultValues });
@@ -56,8 +54,8 @@ const EditCategory = () => {
       dispatch(UPDATE_EMPLOYEES_DATA({ url, body }));
       if (success == true) {
         navigate(ROUTES.EMPLOYEES.BASE);
-        setDesignationValidation(false);
         dispatch(GET_ALL_EMPLOYEES());
+        setDesignationValidation(false);
         return true;
       }
     }

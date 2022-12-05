@@ -20,7 +20,6 @@ const TimeTable = ({
   const [date, setDate] = useState("");
   const [columns, setColumns] = useState([]);
   const [key, setKey] = useState(false);
-  const [expanded, setExpanded] = useState(false);
 
   const { employeesTimeTable, loading, success } = useSelector(
     (state) => state.employeeTimeTable
