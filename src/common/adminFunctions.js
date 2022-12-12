@@ -1,6 +1,4 @@
 import { Toast } from "../helpers/sweetAlert";
-import { GET_ALL_EMPLOYEES } from "../reducers/employee/employeeSlice";
-import { GET_ALL_EMPLOYEES_TIME_TABLE } from "../reducers/timeTable/timeTableSlice";
 import { deleteDataFromBody } from "../services/service";
 import { SERVER_BASE_URL } from "./constants";
 export const deleteMultipleData = (data, key, name, date) => {
@@ -35,13 +33,13 @@ export const deleteMultipleData = (data, key, name, date) => {
     }
   });
 };
-export const manageStates = ({
+export const manageStates = (
   internee,
   developer,
   name,
   date,
-  employeesTimeTable,
-}) => {
+  employeesTimeTable
+) => {
   let internees, developers, employees_data;
   if (internee) {
     if ((name && date) || name) {
@@ -52,21 +50,21 @@ export const manageStates = ({
       internees = employeesTimeTable.filter(
         (item) => item?.employeeId?.designation == "internee"
       );
-      employees_data = internees.map((data, i) => {
-        return {
-          ...data,
-          sr_no: i + 1,
-        };
-      });
     }
+    employees_data = internees.map((data, i) => {
+      return {
+        ...data,
+        sr_no: i + 1,
+      };
+    });
   } else if (developer) {
     if ((name && date) || name) {
       developers = employeesTimeTable.filter(
-        (item) => item?.designation == "developer"
+        (item) => item?.designation != "internee"
       );
     } else if (date || (!date && !name)) {
       developers = employeesTimeTable.filter(
-        (item) => item?.employeeId?.designation == "developer"
+        (item) => item?.employeeId?.designation != "internee"
       );
     }
     employees_data = developers.map((data, i) => {
@@ -76,4 +74,5 @@ export const manageStates = ({
       };
     });
   }
+  return employees_data;
 };

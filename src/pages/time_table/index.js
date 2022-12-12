@@ -24,7 +24,6 @@ const TimeTable = ({
   const { employeesTimeTable, loading, success } = useSelector(
     (state) => state.employeeTimeTable
   );
-  console.log(employeesTimeTable);
   useEffect(() => {
     dispatch(GET_ALL_EMPLOYEES_TIME_TABLE({ name, date }));
     if (success === true) {
@@ -38,48 +37,13 @@ const TimeTable = ({
     name,
   ]);
   const manageState = () => {
-    // manageStates(
-    //   internee,
-    //   developer,
-    //   name,
-    //   date,
-    //   employeesTimeTable,
-    // );
-
-    let internees, developers, employees_data;
-    if (internee) {
-      if ((name && date) || name) {
-        internees = employeesTimeTable.filter(
-          (item) => item?.designation == "internee"
-        );
-      } else if (date || (!date && !name)) {
-        internees = employeesTimeTable.filter(
-          (item) => item?.employeeId?.designation == "internee"
-        );
-      }
-      employees_data = internees.map((data, i) => {
-        return {
-          ...data,
-          sr_no: i + 1,
-        };
-      });
-    } else if (developer) {
-      if ((name && date) || name) {
-        developers = employeesTimeTable.filter(
-          (item) => item?.designation != "internee"
-        );
-      } else if (date || (!date && !name)) {
-        developers = employeesTimeTable.filter(
-          (item) => item?.employeeId?.designation != "internee"
-        );
-      }
-      employees_data = developers.map((data, i) => {
-        return {
-          ...data,
-          sr_no: i + 1,
-        };
-      });
-    }
+    const employees_data = manageStates(
+      internee,
+      developer,
+      name,
+      date,
+      employeesTimeTable
+    );
     setEmployeesData(employees_data);
   };
 
