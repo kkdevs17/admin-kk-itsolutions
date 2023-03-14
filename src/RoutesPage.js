@@ -34,7 +34,7 @@ export default function RoutesPage() {
   const [checkIn, setCheckIn] = useState(false);
   const [checkOut, setCheckOut] = useState(false);
   const isAuth = useSelector(isAuthStatus);
-  const socket = io.connect("https://kk-it-solutions.herokuapp.com");
+  const socket = io.connect("https://backend.attendance.kkitsolutions.com");
 
   // set notifications
   useEffect(() => {
